@@ -3,10 +3,10 @@
 // express.Router()
 
 // express.Router() is used to create a new router object
-const router = require('express').Router();
+const router = require("express").Router();
 
 // add our new route
-const noteRoutes = require('./noteRoutes');
+const noteRoutes = require("./noteRoutes");
 
 // router.use()
 // this uses the specified middleware function (or functions).
