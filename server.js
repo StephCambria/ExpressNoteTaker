@@ -1,4 +1,6 @@
 // ask the app to listen on port 3306
+// https://www.npmjs.com/package/dotenv
+// npm install gotenv --save
 const PORT = process.env.PORT || 3306;
 
 // import express
