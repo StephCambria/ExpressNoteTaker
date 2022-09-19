@@ -5,14 +5,33 @@ const express = require('express');
 // express.Router() is used to create a new router object
 const router = express.Router();
 
-// add our new route
-const noteRoutes = require("./noteRoutes");
+const {createNewNote, updateDb} = require('../../lib/noteFunctions.js');
+// npm i uuidv4
+const { v4: uuidv4 } = require('uuid');
+const {notes} = require('../../db/db.json');
 
-// router.use()
-// this uses the specified middleware function (or functions).
-// it more or less mounts middleware for the routes which are being served by the specific router
-// pretty self-explanatory
-router.use(noteRoutes);
+
+// shows all notes in json data
+router.get("/notes", (req, res) => {
+    let results = notes;
+    res.json(results);
+});
+
+// router.post
+router.post("/notes", (req, res) => {
+    req.body.id = uuidv4();
+    const newNote = createNewNote(req.body, notes);
+    res.json(newNote);
+});
+
+// router.delete
+// for deleting functionality
+router.delete('/notes/:id', (req, res) => {
+    const params = req.params.id
+    updateDb(params, notes);
+    res.redirect('');
+});
+
 
 // export this file
 // module.exports = router maps a router and all of the logic required to map

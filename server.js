@@ -4,11 +4,7 @@ const express = require("express");
 const app = express();
 
 // ask the app to listen on port 3000
-const PORT = 3000;
-
-// https://www.npmjs.com/package/nodemon
-const fs = require("fs");
-const path = require("path");
+const PORT = process.env.PORT || 3001;
 
 // we've required express ^^^
 // now we can create a new instance of Router on it.
@@ -18,17 +14,13 @@ const path = require("path");
 const apiRoutes = require("./routes/apiRoutes");
 const htmlRoutes = require("./routes/htmlRoutes");
 
-// using middleware
-// urlencoded() is a built-in function in express
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
 
 // using static files
 // used to specify the root directory from which to serve static assets
 app.use(express.static("public"));
+// parse incoming string or array data
+app.use(express.urlencoded({extended: true}));
+// parse incoming JSON data
 app.use(express.json());
 
 // now we can bring express and our routes together
@@ -45,8 +37,6 @@ app.listen(PORT, () => {
 });
 
 // on the command line, type node server.js
-// right now it's not working because I haven't written the files I'm requiring
-// but now that my foundation is done, I can do that!
 
-// UPDATE
-// back-end is working!
+// alternatively, type npm start,
+// then in your browser, type localhost:3001
