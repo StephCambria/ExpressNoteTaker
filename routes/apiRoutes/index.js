@@ -5,7 +5,7 @@ const express = require('express');
 // express.Router() is used to create a new router object
 const router = express.Router();
 
-const {createNewNote, updateDb} = require('../../lib/noteFunctions.js');
+const {createNewNote, updateDb} = require('../../lib/notes');
 // npm i uuidv4
 const { v4: uuidv4 } = require('uuid');
 const {notes} = require('../../db/db.json');
