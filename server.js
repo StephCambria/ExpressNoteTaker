@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 
 // ask the app to listen on port 3000
-const PORT = process.env.PORT || 3001;
+const PORT = 5501;
 
 // we've required express ^^^
 // now we can create a new instance of Router on it.
