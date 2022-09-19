@@ -14,12 +14,11 @@ const PORT = process.env.PORT || 3001;
 const apiRoutes = require("./routes/apiRoutes");
 const htmlRoutes = require("./routes/htmlRoutes");
 
-
 // using static files
 // used to specify the root directory from which to serve static assets
 app.use(express.static("public"));
 // parse incoming string or array data
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
 
