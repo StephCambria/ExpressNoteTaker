@@ -1,13 +1,12 @@
-// ask the app to listen on port 3306
-// https://www.npmjs.com/package/dotenv
-// npm install gotenv --save
-const PORT = process.env.PORT || 3306;
-
 // import express
 // npm install express --save
 const express = require("express");
-const app = express;
-const router = express.Router();
+const app = express();
+
+// ask the app to listen on port 3306
+// https://www.npmjs.com/package/dotenv
+// npm install gotenv --save
+const PORT = 3000;
 
 // https://www.npmjs.com/package/nodemon
 const fs = require("fs");
@@ -23,7 +22,7 @@ const htmlRoutes = require("./routes/htmlRoutes");
 
 // using middleware
 // urlencoded() is a built-in function in express
-router.use(
+app.use(
   express.urlencoded({
     extended: true,
   })
@@ -31,20 +30,20 @@ router.use(
 
 // using static files
 // used to specify the root directory from which to serve static assets
-router.use(express.static("public"));
-router.use(express.json());
+app.use(express.static("public"));
+app.use(express.json());
 
 // now we can bring express and our routes together
 // we connect them to our application via ".use"
-router.use("/api", apiRoutes);
-router.use("/", htmlRoutes);
+app.use("/api", apiRoutes);
+app.use("/", htmlRoutes);
 
 // we asked the app to listen on port at the beginning of the file,
 // now we write the function to call it
 // app.listen() is used to bind and listen to the connections on the specified host and port
 app.listen(PORT, () => {
   // for debugging
-  console.log(`API server listening on port ${PORT}! 🚀`);
+  console.log(`Server listening on port ${PORT}! 🚀`);
 });
 
 // on the command line, type node server.js
