@@ -1,7 +1,8 @@
+const express = require('express');
 // setting up the router
 const path = require('path');
 // express.Router() is used to create a new router object
-const router = require('express').Router();
+const router = express.Router();
 
 // joining the router to notes.html
 router.get('/notes', (req, res) => {

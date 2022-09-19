@@ -1,9 +1,9 @@
 // === ROUTE PARAMETERS === //
 // express.js
 // express.Router()
-
+const express = require('express');
 // express.Router() is used to create a new router object
-const router = require("express").Router();
+const router = express.Router();
 
 // add our new route
 const noteRoutes = require("./noteRoutes");

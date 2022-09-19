@@ -1,5 +1,6 @@
+const express = require('express');
 // setting up the router
-const router = require("express").Router();
+const router = express.Router();
 
 // before we start listening for http connections,
 // we initialize the database by calling initDb
