@@ -4,9 +4,10 @@
 const PORT = process.env.PORT || 3306;
 
 // import express
-// npm install express
+// npm install express --save
 const express = require("express");
 const app = express;
+const router = express.Router();
 
 // https://www.npmjs.com/package/nodemon
 const fs = require("fs");
@@ -22,7 +23,7 @@ const htmlRoutes = require("./routes/htmlRoutes");
 
 // using middleware
 // urlencoded() is a built-in function in express
-app.request(
+router.use(
   express.urlencoded({
     extended: true,
   })
@@ -30,13 +31,13 @@ app.request(
 
 // using static files
 // used to specify the root directory from which to serve static assets
-app.request(express.static("public"));
-app.request(express.json());
+router.use(express.static("public"));
+router.use(express.json());
 
 // now we can bring express and our routes together
 // we connect them to our application via ".use"
-app.use("/api", apiRoutes);
-app.use("/", htmlRoutes);
+router.use("/api", apiRoutes);
+router.use("/", htmlRoutes);
 
 // we asked the app to listen on port at the beginning of the file,
 // now we write the function to call it
