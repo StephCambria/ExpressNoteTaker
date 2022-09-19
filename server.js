@@ -3,9 +3,7 @@
 const express = require("express");
 const app = express();
 
-// ask the app to listen on port 3306
-// https://www.npmjs.com/package/dotenv
-// npm install gotenv --save
+// ask the app to listen on port 3000
 const PORT = 3000;
 
 // https://www.npmjs.com/package/nodemon
