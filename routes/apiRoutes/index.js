@@ -13,6 +13,7 @@ module.exports = app => {
         // set up the /api/notes get route
         app.get("/api/notes", (req, res) => {
             // read the db.json file and return all saved notes as JSON
+            readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
             res.json(notes);
         });
 
