@@ -1,114 +1,79 @@
 // import express
 // npm install express --save
 const express = require("express");
-const app = express();
+const path = require('path');
+const fs = require('fs');
+const util = require('util');
+
+// handling asynchronous processes
+const readFileAsync = util.promisify(fs.readFile);
+const writeFileAsync = util.promisify(fs.writeFile);
 
 // ask the app to listen on port 3000
+// this begins setting up the server
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-const fs = require('fs');
-const path = require('path');
-
-// we've required express ^^^
-// now we can create a new instance of Router on it.
-// we're holding it in a variable called routes.
-// next we create a route at the root path of this router that will send back a simple message
-// then, we can export the router.
-require('./routes/apiRoutes/index')(app);
-
-// using static files
-// used to specify the root directory from which to serve static assets
-// Middleware for parsing JSON and urlencoded form data
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.json());
+
+// static middleware
+app.use(express.static("./public"));
 
 
-// =================================
-
-// Basic route that sends the user first to the AJAX Page
-app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname, "/public/index.html"));
-});
-
-app.get("/notes", function (req, res) {
-  res.sendFile(path.join(__dirname, "/public/notes.html"));
-
-});
-
-app.post("/api/notes", function (req, res) {
-  fs.readFile(__dirname + "/db/db.json", 'utf8', function (error, notes) {
-    if (error) {
-      return console.log(error)
-    }
-    notes = JSON.parse(notes)
-
-    var id = notes[notes.length - 1].id + 1
-    var newNote = { title: req.body.title, text: req.body.text, id: id }
-    var activeNote = notes.concat(newNote)
-
-    fs.writeFile(__dirname + "/db/db.json", JSON.stringify(activeNote), function (error, data) {
-      if (error) {
-        return error
-      }
-      console.log(activeNote)
-      res.json(activeNote);
-    })
-  })
-})
-
-// Pull from db.json
-app.get("/api/notes", function (req, res) {
-  fs.readFile(__dirname + "/db/db.json", 'utf8', function (error, data) {
-    if (error) {
-      return console.log(error)
-    }
-    console.log("This is Notes", data)
-    res.json(JSON.parse(data))
+// API route | "GET" request
+app.get('/api/notes', (req, res) => {
+  readFileAsync("./db/db.json", "utf8").then(function(data) {
+    notes = [].concat(JSON.parse(data))
+    res.json(notes);
   })
 });
 
-app.delete("/api/notes/:id", function (req, res) {
-  const noteId = JSON.parse(req.params.id)
-  console.log(noteId)
-  fs.readFile(__dirname + "/db/db.json", 'utf8', function (error, notes) {
-    if (error) {
-      return console.log(error)
-    }
-    notes = JSON.parse(notes)
+// API Route | "POST" request
+app.post("/api/notes", function(req, res) {
+  const note = req.body;
+  readFileAsync("./db/db.json", "utf8").then(function(data) {
+    const notes = [].concat(JSON.parse(data));
+    note.id = notes.length + 1
+    notes.push(note);
+    return notes
+  }).then(function(notes) {
+    writeFileAsync("./db/db.json", JSON.stringify(notes))
+    res.json(note);
+  })
+});
 
-    notes = notes.filter(val => val.id !== noteId)
-
-    fs.writeFile(__dirname + "/db/db.json", JSON.stringify(notes), function (error, data) {
-      if (error) {
-        return error
+// API Route | "DELETE" request
+app.delete("/api/notes/:id", function(req, res) {
+  const idToDelete = parseInt(req.params.id);
+  readFileAsync("./db/db.json", "utf8").then(function(data) {
+    const notes = [].concat(JSON.parse(data));
+    const newNotesData = []
+    for (let i = 0; i<notes.length; i++) {
+      if(idToDelete !== notes[i].id) {
+        newNotesData.push(notes[i])
       }
-      res.json(notes)
-    })
+    }
+    return newNotesData
+  }).then(function(notes) {
+    writeFileAsync("./db/db.json", JSON.stringify(notes))
+    res.send('saved success!!!');
   })
 })
 
-app.put("/api/notes/:id", function(req, res) {
-  const noteId = JSON.parse(req.params.id)
-  console.log(noteId)
-  fs.readFile(__dirname + "db/db.json", "utf8", function(error, notes) {
-    if (error ){
-      return console.log(error)
-    }
-    notes.JSONparse(notes)
+// HTML Routes
+app.get("/notes", function(req, res) {
+  res.sendFile(path.join(__dirname, "./public/notes.html"));
+  });
 
-    notes = notes.filter(val => val.id !== noteId)
+app.get("/", function(req, res) {
+     res.sendFile(path.join(__dirname, "./public/index.html"));
+  });
 
-    fs.writeFile(__dirname +"db/db.json", JSON.stringify(notes), function (error, data) {
-      if (error) {
-        return error
-      }
-      res.json(notes)
-    })
-  })
-})
+  app.get("*", function(req, res) {
+    res.sendFile(path.join(__dirname, "./public/index.html"));
+ });
 
-// ======================================
 
 
 // we asked the app to listen on port at the beginning of the file,
