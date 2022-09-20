@@ -20,10 +20,14 @@ This project provided me with finished front-end code, and required me to build 
 
 
 ## Installation
-To install and run this application:
+This application is deployed via Heroku (pending).
+
+However, if you want to run it locally, follow these steps:
+
 * open the command line and clone the project locally
 * import express by typing ```npm install express --save```
 * type ```node server.js```
+* alternatively, type ```npm start```
 
 ## Usage
 This application (and repository) serve as a helpful point of reference for both the front and back-end of web development, as it utilizes aspects of both symbiotically.
