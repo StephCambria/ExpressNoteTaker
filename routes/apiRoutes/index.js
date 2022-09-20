@@ -1,38 +1,62 @@
-// === ROUTE PARAMETERS === //
-// express.js
-// express.Router()
-const express = require('express');
-// express.Router() is used to create a new router object
-const router = express.Router();
+const fs = require('fs');
+const path = require('path');
 
-const {createNewNote, updateDb} = require('../../lib/notes');
-// npm i uuidv4
-const { v4: uuidv4 } = require('uuid');
-const {notes} = require('../../db/db.json');
+module.exports = app => {
+    // set up notes variable
+    fs.readFile("db/db.json", "utf8", (err, data) => {
+        if (err) throw err;
+        var notes = JSON.parse(data);
 
+        // API ROUTES
+        // ========================================
 
-// shows all notes in json data
-router.get("/notes", (req, res) => {
-    let results = notes;
-    res.json(results);
-});
+        // set up the /api/notes get route
+        app.get("/api/notes", (req, res) => {
+            // read the db.json file and return all saved notes as JSON
+            res.json(notes);
+        });
 
-// router.post
-router.post("/notes", (req, res) => {
-    req.body.id = uuidv4();
-    const newNote = createNewNote(req.body, notes);
-    res.json(newNote);
-});
+        // set up the /api/notes post route
+        app.post("/api/notes", (req, res) => {
+            // receives a new note, adds it to db.json, then returns the new note
+            let newNote = req.body;
+            notes.push(newNote);
+            updateDb();
+            return console.log("Added a new note: " + newNote.title);
+        });
 
-// router.delete
-// for deleting functionality
-router.delete('/notes/:id', (req, res) => {
-    const params = req.params.id
-    updateDb(params, notes);
-    res.redirect('');
-});
+        // retrieves a note with a specific id
+        app.get("/api/notes/:id", (req, res) => {
+            // display JSON for the notes array indices of the provided id
+            res.json(notes[req.params.id]);
+        });
 
+        // deleted a note with a specific id
+        app.delete("/api/notes/:id", (req, res) => {
+            notes.splice(req.params.id, 1);
+            updateDb();
+            console.log("Deleted note with id " + req.params.id);
+        });
 
-// export this file
-// module.exports = router maps a router and all of the logic required to map
-module.exports = router;
+        // VIEW ROUTES
+        // ========================================
+
+        // display notes.html when /notes is accessed
+        app.get('/notes', (req, res) => {
+            res.sendFile(path.join(__dirname, "../public/notes.html"));
+        });
+
+        // display index.html when all other routes are accessed
+        app.get('*', (req, res) => {
+            res.sendFile(path.join(__dirname, "../public/index.html"));
+        });
+
+        // updates the JSON file whenever a note is added or deleted
+        function updateDb() {
+            fs.writeFile("db/db.json", JSON.stringify(notes, '\t'), err => {
+                if (err) throw err;
+                return true;
+            });
+        }
+    });
+}
