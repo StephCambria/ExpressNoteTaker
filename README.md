@@ -17,10 +17,16 @@ A simple application that allows users to input, update, and delete notes. The c
 
 This project provided me with finished front-end code, and required me to build the back-end portion of the code from scratch. Using express.js, I was able to develop a file system to utilize basic routing. Each file is organized and called via server.js.
 
+<img width="1678" alt="Screen Shot 2022-09-21 at 1 26 39 PM" src="https://user-images.githubusercontent.com/107421370/191573896-c0fb7ba6-0c9b-4b73-985f-da186967f011.png">
+<img width="1667" alt="Screen Shot 2022-09-21 at 1 35 49 PM" src="https://user-images.githubusercontent.com/107421370/191573933-5d94fa36-86be-43a5-8bda-666966933d23.png">
+<img width="1334" alt="Screen Shot 2022-09-21 at 1 37 53 PM" src="https://user-images.githubusercontent.com/107421370/191573950-e9efcbd7-8ed1-4af7-9141-5726ed636563.png">
+
+
+
 
 
 ## Installation
-This application is deployed via Heroku (pending).
+This application is deployed via [Heroku](https://expressjs-note-takerapp.herokuapp.com/)
 
 However, if you want to run it locally, follow these steps:
 
@@ -28,6 +34,7 @@ However, if you want to run it locally, follow these steps:
 * import express by typing ```npm install express --save```
 * type ```node server.js```
 * alternatively, type ```npm start```
+* lastly, go to your browser and type ```http://localhost:3000/```
 
 ## Usage
 This application (and repository) serve as a helpful point of reference for both the front and back-end of web development, as it utilizes aspects of both symbiotically.
